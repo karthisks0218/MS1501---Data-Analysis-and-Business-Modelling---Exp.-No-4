@@ -40,5 +40,80 @@ The dataset used for this experiment is `fish.csv` which contains real-world phy
 
 ## Program & Output
 
+# Step 1: Import Required Libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+
+# Step 2: Load Dataset
+df = pd.read_csv('Fish_length.csv')
+
+# Step 3: Display Dataset
+print(df.head())
+print(df.columns)
+
+# Step 4: Select Independent (X) and Dependent (Y) Variables
+
+# Calculate average of Length1, Length2 and Length3
+L = df[['Length1', 'Length2', 'Length3']].mean(axis=1)
+
+# Independent variables
+X = pd.DataFrame({
+    'L': L,
+    'Height': df['Height'],
+    'Width': df['Width']
+})
+
+# Dependent variable
+Y = df['Weight']
+
+# Step 5: Build and Train Multiple Regression Model
+model = LinearRegression()
+model.fit(X, Y)
+
+# Step 6: Display Model Coefficients and Intercept
+print("\nIntercept (a):", model.intercept_)
+print("Coefficients (b1, b2, b3):", model.coef_)
+
+# Step 7: Form Regression Equation
+print(f"\nRegression Equation: Weight = {model.intercept_:.2f} + "
+      f"{model.coef_[0]:.2f}×L + "
+      f"{model.coef_[1]:.2f}×Height + "
+      f"{model.coef_[2]:.2f}×Width")
+
+# Step 8: Predict Values
+Y_pred = model.predict(X)
+print("\nPredicted Weight Values:")
+print(Y_pred[:10])
+
+# Step 9: Evaluate Model Performance
+r2 = r2_score(Y, Y_pred)
+print(f"\nModel Performance (R² Score): {r2:.4f}")
+
+# Step 10: Visualization - Actual vs Predicted Weights
+plt.figure(figsize=(8, 6))
+plt.scatter(range(len(Y)), Y, color='blue',
+            label='Actual Weight')
+plt.plot(range(len(Y)), Y_pred, color='red',
+         linewidth=2, label='Predicted Weight')
+
+plt.title("Actual vs Predicted Fish Weights (Multiple Regression)")
+plt.xlabel("Data Points")
+plt.ylabel("Weight (grams)")
+plt.legend()
+plt.show()
+
+# Output
+
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/45f73bfd-6336-4562-9612-a14786ea4b18" />
+
 
 ## Result
+
+The Multiple Linear Regression model was successfully implemented using the Fish dataset (fish.csv). The model was used to predict the weight of fish based on its physical characteristics, such as Length1, Length2, and Height.
+
+The model achieved an R² score of 0.8808, indicating that it explains approximately 88.08% of the variation in fish weight.
+
+Hence, the experiment was successfully completed, and the model demonstrated a strong relationship between fish measurements and their weight.
